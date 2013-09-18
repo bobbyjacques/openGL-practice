@@ -3,6 +3,7 @@ package com.meetthejacques.openglpractice.programs;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUniform4f;
 
 import com.meetthejacques.openglpractice.R;
 import android.content.Context;
@@ -14,7 +15,7 @@ public class ColorShaderProgram extends ShaderProgram {
 	
 	//Attribute locatons
 	private final int aPositionLocation;
-	private final int aColorLocation;
+	private final int uColorLocation;
 	
 	public ColorShaderProgram(Context context) {
 		super(context, R.raw.simple_vertex_shader, R.raw.simple_fragment_shader);
@@ -24,12 +25,13 @@ public class ColorShaderProgram extends ShaderProgram {
 		
 		//Retrieve attribute locations for the shader program
 		aPositionLocation = glGetAttribLocation(program, A_POSITION);
-		aColorLocation = glGetAttribLocation(program, A_COLOR);
+		uColorLocation = glGetUniformLocation(program, U_COLOR);
 	}
 	
-	public void setUniforms(float[] matrix){
+	public void setUniforms(float[] matrix, float r, float g, float b){
 		//pass the matrix into the shader program
 		glUniformMatrix4fv(uMatrixLocation, 1, false, matrix, 0);
+		glUniform4f(uColorLocation, r, g, b, 1f);
 	}
 	
 	public int getPositionAttributeLocation() {
@@ -37,7 +39,7 @@ public class ColorShaderProgram extends ShaderProgram {
 	}
 	
 	public int getColorAttributeLocation() {
-		return aColorLocation;
+		return uColorLocation;
 	}
 
 }
